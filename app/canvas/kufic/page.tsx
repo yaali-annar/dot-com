@@ -1,7 +1,7 @@
 'use client';
-import React, { createRef, useState } from 'react';
+import React, { createRef, useCallback, useEffect, useState } from 'react';
 
-import { render } from '@/engines/kufic';
+import { render } from './engine';
 
 const gridSize = 16;
 const border = 32;
@@ -11,7 +11,7 @@ const Kufic = ()=>{
   const [width, setWidth] = useState(80);
   const [height, setHeight] = useState(640);
   
-  const generate = () =>{
+  const generate = useCallback(() =>{
     const context = ref.current.getContext('2d');   
     context.clearRect(0, 0, width+border, height+border); 
     context.lineCap = 'square';
@@ -24,7 +24,10 @@ const Kufic = ()=>{
       height: height/gridSize,
       border
     } );
-  };
+  },[height, ref, width]);
+
+
+  useEffect(() => {generate();}, [generate]);
 
   return (
     <div className='p-4'>
